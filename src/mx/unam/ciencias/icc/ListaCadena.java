@@ -28,7 +28,9 @@ public class ListaCadena {
          * @param elemento el elemento del nodo.
          */
         public Nodo(String elemento) {
-            // Aquí va su código.
+            this.elemento=elemento;
+	    anterior=null;
+	    siguiente=null;
         }
 
         /**
@@ -36,7 +38,7 @@ public class ListaCadena {
          * @return el nodo anterior del nodo.
          */
         public Nodo getAnterior() {
-            // Aquí va su código.
+            return(anterior);
         }
 
         /**
@@ -44,7 +46,7 @@ public class ListaCadena {
          * @return el nodo siguiente del nodo.
          */
         public Nodo getSiguiente() {
-            // Aquí va su código.
+            return(siguiente);
         }
 
         /**
@@ -52,7 +54,7 @@ public class ListaCadena {
          * @return el elemento del nodo.
          */
         public String get() {
-            // Aquí va su código.
+            return(elemento);
         }
     }
 
@@ -68,7 +70,7 @@ public class ListaCadena {
      * @return la longitud de la lista, el número de elementos que contiene.
      */
     public int getLongitud() {
-        // Aquí va su código.
+        return(longitud);
     }
 
     /**
@@ -77,7 +79,11 @@ public class ListaCadena {
      *         otro caso.
      */
     public boolean esVacia() {
-        // Aquí va su código.
+        if(cabeza == null){
+	    return(true);
+	}else{
+	return(false);
+	}
     }
 
     /**
@@ -86,7 +92,17 @@ public class ListaCadena {
      * @param elemento el elemento a agregar.
      */
     public void agregaFinal(String elemento) {
-        // Aquí va su código.
+	Nodo nodo= new Nodo(elemento);
+	if(this.esVacia()){
+	    cabeza=nodo;
+	    rabo=cabeza;
+	}else{
+	    rabo.siguiente=nodo;
+	    nodo.anterior=rabo;
+	    rabo=nodo;	    
+      	}	
+	longitud=longitud+1;
+
     }
 
     /**
@@ -95,7 +111,16 @@ public class ListaCadena {
      * @param elemento el elemento a agregar.
      */
     public void agregaInicio(String elemento) {
-        // Aquí va su código.
+        Nodo nodo= new Nodo(elemento);
+	if(this.esVacia()){
+	    cabeza=nodo;
+	    rabo=cabeza;
+	}else{
+	    cabeza.anterior=nodo;
+	    nodo.siguiente=cabeza;
+	    cabeza=nodo;	    
+      	}	
+	longitud=longitud+1;
     }
 
     /**
@@ -112,7 +137,29 @@ public class ListaCadena {
      * @param elemento el elemento a insertar.
      */
     public void inserta(int i, String elemento) {
-        // Aquí va su código.
+        if( i <1){
+	    this.agregaInicio(elemento);
+	    return;
+	}else if( (0 < i) && (i < longitud) ){
+	    Nodo contador = new Nodo(null);
+	    contador=cabeza;	    
+	    int k=0;
+	    while(k < i){
+		contador=contador.siguiente;
+		k=k+1;
+	    }
+	    Nodo nuevo = new Nodo(elemento);
+	    nuevo.anterior=contador.anterior;
+	    nuevo.siguiente=contador;
+	    contador.anterior.siguiente=nuevo;
+	    contador.anterior=nuevo;
+	    longitud = longitud+1;
+	    return;
+	}else if( longitud -1 <i){
+	    this.agregaFinal(elemento);
+	    return;
+	} 
+     
     }
 
     /**
@@ -121,8 +168,32 @@ public class ListaCadena {
      * @param elemento el elemento a eliminar.
      */
     public void elimina(String elemento) {
-        // Aquí va su código.
-    }
+	if(this.esVacia()){
+	    return;
+	}else{
+	    Nodo contador = cabeza;
+	    while( contador != null){
+		if(contador.elemento.equals(elemento)){
+		    if(contador == cabeza){
+			this.eliminaPrimero();
+			return;
+		    }else if(contador == rabo){
+			this.eliminaUltimo();
+			return;
+		    }else{
+			contador.anterior.siguiente=contador.siguiente;
+			contador.siguiente.anterior=contador.anterior;
+			contador=null;
+			longitud=longitud-1;
+			return;
+		    }
+		}else{
+		    contador=contador.siguiente;
+		}
+	    }	   		
+	}
+    }   
+
 
     /**
      * Elimina el primer elemento de la lista y lo regresa.
@@ -130,7 +201,22 @@ public class ListaCadena {
      *         <code>null</code> si la lista está vacía.
      */
     public String eliminaPrimero() {
-        // Aquí va su código.
+        if(this.esVacia()){
+	    return null;
+	}else if(longitud ==1){
+	    String primero = cabeza.elemento;
+	    cabeza=null;
+	    rabo = null;
+	    longitud=longitud-1;
+	    return(primero);
+	}else{
+	    String primero = cabeza.elemento;
+	    cabeza.siguiente.anterior=null;
+	    cabeza=cabeza.siguiente;
+	    longitud= longitud-1;
+	    return(primero);
+	}
+	
     }
 
     /**
@@ -139,7 +225,22 @@ public class ListaCadena {
      *         <code>null</code> si la lista está vacía.
      */
     public String eliminaUltimo() {
-        // Aquí va su código.
+	if(this.esVacia()){
+	    return(null);
+	}else if(longitud == 1){
+	    String ultimo = rabo.elemento;
+	    rabo = null;
+	    cabeza = null;
+	    longitud--;
+	    return(ultimo);
+	}else{
+	    String ultimo =rabo.elemento;
+	    rabo.anterior.siguiente=null;
+	    rabo=rabo.anterior;
+	    longitud=longitud-1;
+	    return(ultimo);
+	}
+	
     }
 
     /**
@@ -149,7 +250,16 @@ public class ListaCadena {
      *         <tt>false</tt> en otro caso.
      */
     public boolean contiene(String elemento) {
-        // Aquí va su código.
+        Nodo contador= cabeza;
+	while(!(contador==null)){
+	    if(contador.elemento.equals(elemento)){
+		return(true);
+	    }else{
+		contador=contador.siguiente;
+	    }
+
+	}
+	return(false);
     }
 
     /**
@@ -157,7 +267,18 @@ public class ListaCadena {
      * @return una nueva lista que es la reversa la que manda llamar el método.
      */
     public ListaCadena reversa() {
-        // Aquí va su código.
+        ListaCadena reversa = new ListaCadena();
+	if(this.esVacia()){
+	    return(reversa);
+	}else{
+	    Nodo contador =new Nodo(null);
+	    contador=this.rabo;
+	    while(contador != null){
+		reversa.agregaFinal(contador.elemento);
+		contador = contador.anterior;		
+	    }
+	    return(reversa);
+	}
     }
 
     /**
@@ -166,16 +287,37 @@ public class ListaCadena {
      * @return una copiad de la lista.
      */
     public ListaCadena copia() {
-        // Aquí va su código.
+        ListaCadena copia = new ListaCadena();
+	if(this.esVacia()){
+	    return(copia);
+	}else{
+	    Nodo contador =new Nodo(null);
+	    contador=this.cabeza;
+	    while(contador != null){
+		copia.agregaFinal(contador.elemento);
+		contador = contador.siguiente;		
+	    }
+	    return(copia);
+	}
+
     }
 
     /**
      * Limpia la lista de elementos. El llamar este método es equivalente a
      * eliminar todos los elementos de la lista.
      */
-    public void limpia() {
-        // Aquí va su código.
+    public void limpia(){
+	if(this.esVacia()){
+	    return;
+	}else{
+	    while(longitud != 0){
+		this.eliminaPrimero();
+	    }
+	    return;
+	}
+	
     }
+	
 
     /**
      * Regresa el primer elemento de la lista.
@@ -183,7 +325,12 @@ public class ListaCadena {
      *         es vacía.
      */
     public String getPrimero() {
-        // Aquí va su código.
+        if(this.esVacia() ){
+	    return(null);
+	}else{
+	    return(cabeza.elemento);
+	}
+	
     }
 
     /**
@@ -192,7 +339,11 @@ public class ListaCadena {
      *         es vacía.
      */
     public String getUltimo() {
-        // Aquí va su código.
+	 if(this.esVacia() ){
+	    return(null);
+	}else{
+	    return(rabo.elemento);
+	}
     }
 
     /**
@@ -205,8 +356,22 @@ public class ListaCadena {
      *         <tt>null</tt> en otro caso.
      */
     public String get(int i) {
-        // Aquí va su código.
-    }
+	String elemento = null;
+	if( i <0){
+	    elemento=null;
+	}else if( (0<=i)  && (i< longitud) ){
+	    Nodo contador = new Nodo(null);
+	    contador =cabeza;
+	    for(int k=0; k<=i; k++){
+		elemento=contador.elemento;
+		contador=contador.siguiente;
+	    }
+       }else if(longitud-1 < i){
+	    elemento=null;
+       }
+	return(elemento);
+    } 
+
 
     /**
      * Regresa el índice del elemento recibido en la lista.
@@ -214,31 +379,58 @@ public class ListaCadena {
      * @return el índice del elemento recibido en la lista, o -1 si el elemento
      *         no está contenido en la lista.
      */
-    public int indiceDe(String elemento) {
-        // Aquí va su código.
+    public int indiceDe(String elemento){
+        if(this.esVacia()){
+	    return(-1);
+	}else{
+	    Nodo contador = new Nodo(null);
+	    int  indice =0;
+	    contador=cabeza;
+	    while( contador != null){
+		if(contador.elemento.equals(elemento)){
+		    return(indice);
+		}else{
+		    contador=contador.siguiente;
+		    indice=indice+1;
+		}	       
+	    }
+	}
+	return(-1);
     }
 
     /**
      * Regresa una representación en cadena de la lista.
      * @return una representación en cadena de la lista.
      */
-    public String toString() {
-        // Aquí va su código.
+    public String toString(){
+	if(this.esVacia()){
+	    String s="[]";
+	    return(s);
+	}else if(longitud==1){
+	    String s= "["+ String.format("%s]", this.get(0));
+	    return(s);
+	}else{
+        String s = "[";
+        for (int i = 0; i < longitud-1; i++)
+            s += String.format("%s, ", this.get(i));
+        s += String.format("%s]", this.get(longitud-1));
+	return(s);
+	}
     }
 
     /**
      * Regresa el nodo cabeza de la lista.
      * @return el nodo cabeza de la lista.
      */
-    public Nodo getCabeza() {
-        // Aquí va su código.
+    public Nodo getCabeza(){
+        return(cabeza);
     }
 
     /**
      * Regresa el nodo rabo de la lista.
      * @return el nodo rabo de la lista.
      */
-    public Nodo getRabo() {
-        // Aquí va su código.
+    public Nodo getRabo(){
+        return(rabo);
     }
 }
